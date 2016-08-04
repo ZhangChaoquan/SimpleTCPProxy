@@ -13,6 +13,7 @@ import sys
 buffer_size = 4096
 delay = 0.0001
 forward_to = ('172.16.38.191', 12345)
+listen_to = ('localhost', 12345)
 
 class Forward:
     def __init__(self):
@@ -30,10 +31,10 @@ class TheServer:
     input_list = []
     channel = {}
 
-    def __init__(self, host, port):
+    def __init__(self, addr):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server.bind((host, port))
+        self.server.bind(addr)
         self.server.listen(200)
 
     def main_loop(self):
@@ -89,7 +90,7 @@ class TheServer:
         self.channel[self.s].send(data)
 
 if __name__ == '__main__':
-        server = TheServer('localhost', 12345)
+        server = TheServer(listen_to)
         try:
             server.main_loop()
         except KeyboardInterrupt:
